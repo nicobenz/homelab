@@ -1,0 +1,80 @@
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - /volume1/paperless/redisdata:/data
+
+  db:
+    image: docker.io/library/postgres:17
+    restart: unless-stopped
+    volumes:
+      - /volume1/paperless/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+      - broker
+      - gotenberg
+      - tika
+    ports:
+      - "8000:8000"
+    volumes:
+      - /volume1/paperless/data:/usr/src/paperless/data
+      - /volume1/paperless/media:/usr/src/paperless/media
+      - /volume1/paperless/export:/usr/src/paperless/export
+      - /volume1/paperless/consume:/usr/src/paperless/consume
+    environment:
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      # Authentik OIDC SSO
+      PAPERLESS_ENABLE_ALLAUTH: "true"
+      PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: >-
+        {"openid_connect": {
+          "APPS": [{
+            "provider_id": "authentik",
+            "name": "Authentik",
+            "client_id": ${OIDC_CLIENT_ID},
+            "secret": ${OIDC_CLIENT_SECRET},
+            "settings": {
+              "server_url": ${OIDC_CONFIGURATION_URL},
+              "claims": {"username": "email"}
+            }
+          }],
+          "OAUTH_PKCE_ENABLED": "True"
+        }}
+      PAPERLESS_AUTO_CREATE: "true"
+      PAPERLESS_AUTO_LOGIN: "true"
+      PAPERLESS_LOGOUT_REDIRECT_URL: ${OIDC_LOGOUT_REDIRECT_URL}
+
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.19
+    restart: unless-stopped
+
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  tika:
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
+
+volumes:
+  data:
+  media:
+  pgdata:
+  redisdata:

@@ -1,0 +1,10 @@
+ services:
+  teaching-tools:
+    image: ghcr.io/nicobenz/teaching-tools:latest
+    pull_policy: always
+    container_name: teaching-tools
+    ports:
+      - "8001:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped

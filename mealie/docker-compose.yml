@@ -1,0 +1,61 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v2.8.0
+    container_name: mealie
+    restart: always
+    ports:
+      - "9925:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    volumes:
+      - mealie-data:/app/data/
+    environment:
+      ALLOW_SIGNUP: "false"
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Berlin
+      BASE_URL: ${BASE_URL}
+      # Database Settings
+      DB_ENGINE: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: mealie
+      
+      # OIDC Configuration
+      OIDC_AUTH_ENABLED: "true"
+      OIDC_SIGNUP_ENABLED: "false"  # Match your ALLOW_SIGNUP setting
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_CONFIGURATION_URL: ${OIDC_CONFIGURATION_URL}
+      OIDC_CALLBACK_URL: ${OIDC_CALLBACK_URL}
+      OIDC_AUTO_REDIRECT: "true"
+      OIDC_PROVIDER_NAME: "Authentik"  # Customizes the SSO button text
+      OIDC_REMEMBER_ME: "true" 
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+  
+  postgres:
+    container_name: mealie-db
+    image: postgres:15
+    restart: always
+    volumes:
+      - mealie-pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      PGUSER: ${POSTGRES_USER}
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+volumes:
+  mealie-data:
+  mealie-pgdata:

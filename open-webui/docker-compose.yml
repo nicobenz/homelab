@@ -1,0 +1,25 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:v0.7.2
+    container_name: owui
+    ports:
+      - "3000:8080"
+    volumes:
+      - owui:/app/backend/data
+    environment:
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - ENABLE_OAUTH_SIGNUP=true
+      - OAUTH_MERGE_ACCOUNTS_BY_EMAIL=true
+      - OAUTH_PROVIDER_NAME=Authentik
+      - OPENID_PROVIDER_URL=${OPENID_PROVIDER_URL}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - OAUTH_SCOPES=openid email profile
+      - OPENID_REDIRECT_URI=${OPENID_REDIRECT_URI}
+      - ENABLE_LOGIN_FORM=false
+      - ENABLE_PERSISTENT_CONFIG=true
+      - OPENAI_API_BASE_URL=https://eu.openrouter.ai/api/v1
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+volumes:
+  owui:
