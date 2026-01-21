@@ -1,17 +1,18 @@
 services:
   broker:
-    image: docker.io/library/redis:7
+    broker:
+    image: docker.io/library/redis:8
     restart: unless-stopped
     volumes:
-      - /volume1/paperless/redisdata:/data
+      - redisdata:/data
 
   db:
-    image: docker.io/library/postgres:17
+    image: docker.io/library/postgres:18
     restart: unless-stopped
     volumes:
-      - /volume1/paperless/pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: paperless
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
@@ -21,21 +22,16 @@ services:
     depends_on:
       - db
       - broker
-      - gotenberg
-      - tika
     ports:
       - "8000:8000"
     volumes:
-      - /volume1/paperless/data:/usr/src/paperless/data
-      - /volume1/paperless/media:/usr/src/paperless/media
-      - /volume1/paperless/export:/usr/src/paperless/export
-      - /volume1/paperless/consume:/usr/src/paperless/consume
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
     environment:
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
-      PAPERLESS_TIKA_ENABLED: 1
-      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
-      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
       # Authentik OIDC SSO
       PAPERLESS_ENABLE_ALLAUTH: "true"
       PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
@@ -56,23 +52,6 @@ services:
       PAPERLESS_AUTO_CREATE: "true"
       PAPERLESS_AUTO_LOGIN: "true"
       PAPERLESS_LOGOUT_REDIRECT_URL: ${OIDC_LOGOUT_REDIRECT_URL}
-
-
-  gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.19
-    restart: unless-stopped
-
-    # The gotenberg chromium route is used to convert .eml files. We do not
-    # want to allow external content like tracking pixels or even javascript.
-    command:
-      - "gotenberg"
-      - "--chromium-disable-javascript=true"
-      - "--chromium-allow-list=file:///tmp/.*"
-
-  tika:
-    image: docker.io/apache/tika:latest
-    restart: unless-stopped
-
 volumes:
   data:
   media:
