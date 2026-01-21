@@ -35,7 +35,11 @@ services:
       OIDC_AUTO_REDIRECT: "true"
       OIDC_PROVIDER_NAME: "Authentik"  # Customizes the SSO button text
       OIDC_REMEMBER_ME: "true" 
-      
+
+      # OpenAI API Configuration
+      OPENAI_API_BASE_URL: https://openrouter.ai/api/v1
+      OPENAI_API_KEY: ${OPENROUTER_API_KEY}
+      OPENAI_MODEL: google/gemini-2.5-flash-lite
     depends_on:
       postgres:
         condition: service_healthy
