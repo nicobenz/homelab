@@ -1,6 +1,5 @@
 services:
   broker:
-    broker:
     image: docker.io/library/redis:8
     restart: unless-stopped
     volumes:
