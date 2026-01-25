@@ -2,7 +2,7 @@ services:
   app:
     image: ghcr.io/itskovacs/trip:1.36.0
     ports:
-      - 127.0.0.1:8002:8000
+      - "8002:8000"
     volumes:
       - trip_storage:/app/storage
     command: ["fastapi", "run", "/app/trip/main.py", "--host", "0.0.0.0"]
