@@ -1,0 +1,10 @@
+services:
+  teaching-tools:
+    image: ghcr.io/nicobenz/semantic-scholar-tools:latest
+    pull_policy: always
+    container_name: semantic-scholar-tools
+    ports:
+      - "8002:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped
