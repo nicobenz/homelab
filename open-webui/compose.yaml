@@ -18,6 +18,7 @@ services:
       - WEBUI_AUTH_TRUSTED_EMAIL_HEADER=Remote-Email
       - EBUI_AUTH_TRUSTED_NAME_HEADER=Remote-Name
       - WEBUI_AUTH_TRUSTED_GROUPS_HEADER=Remote-Role
+      - ENABLE_OAUTH_PERSISTENT_CONFIG=false
 
 volumes:
   owui:
