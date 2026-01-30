@@ -4,20 +4,10 @@ services:
     restart: unless-stopped
     volumes:
       - redisdata:/data
-  db:
-    image: docker.io/library/postgres:18
-    restart: unless-stopped
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: paperless
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     depends_on:
-      - db
       - broker
       - gotenberg
       - tika
@@ -30,15 +20,9 @@ services:
       - /volume1/library/consume:/usr/src/paperless/consume
     environment:
       PAPERLESS_REDIS: redis://broker:6379
-      PAPERLESS_DBHOST: db
-      PAPERLESS_DBNAME: paperless
-      PAPERLESS_DBUSER: ${POSTGRES_USER}
-      PAPERLESS_DBPASS: ${POSTGRES_PASSWORD}
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
-      #PAPERLESS_ENABLE_HTTP_REMOTE_USER: true
-      #PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_REMOTE_USER
   gotenberg:
     image: docker.io/gotenberg/gotenberg:8.25
     restart: unless-stopped
@@ -54,5 +38,4 @@ services:
 volumes:
   data:
   media:
-  pgdata:
   redisdata:
