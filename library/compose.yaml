@@ -31,26 +31,9 @@ services:
     environment:
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
-      # Authentik OIDC SSO
-      PAPERLESS_ENABLE_ALLAUTH: "true"
-      PAPERLESS_APPS: "allauth.socialaccount.providers.openid_connect"
-      PAPERLESS_SOCIALACCOUNT_PROVIDERS: >-
-        {"openid_connect": {
-          "APPS": [{
-            "provider_id": "authentik",
-            "name": "Authentik",
-            "client_id": ${OIDC_CLIENT_ID},
-            "secret": ${OIDC_CLIENT_SECRET},
-            "settings": {
-              "server_url": ${OIDC_CONFIGURATION_URL},
-              "claims": {"username": "email"}
-            }
-          }],
-          "OAUTH_PKCE_ENABLED": "True"
-        }}
-      PAPERLESS_AUTO_CREATE: "true"
-      PAPERLESS_AUTO_LOGIN: "true"
-      PAPERLESS_LOGOUT_REDIRECT_URL: ${OIDC_LOGOUT_REDIRECT_URL}
+      # Forward header support
+      #PAPERLESS_ENABLE_HTTP_REMOTE_USER: true
+      #PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_REMOTE_USER
 volumes:
   data:
   media:
