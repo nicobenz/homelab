@@ -15,6 +15,9 @@ services:
       - OPENAI_API_BASE_URL=https://openrouter.ai/api/v1
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
+      - WEBUI_AUTH_TRUSTED_EMAIL_HEADER=Remote-Email
+      - EBUI_AUTH_TRUSTED_NAME_HEADER=Remote-Name
+      - WEBUI_AUTH_TRUSTED_GROUPS_HEADER=Remote-Role
 
 volumes:
   owui:
