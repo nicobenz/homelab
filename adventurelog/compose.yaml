@@ -3,7 +3,6 @@ services:
     image: ghcr.io/seanmorley15/adventurelog-frontend:latest
     container_name: adventurelog-frontend
     restart: unless-stopped
-    env_file: .env
     ports:
       - "8015:3000"
     depends_on:
@@ -13,7 +12,6 @@ services:
     image: postgis/postgis:16-3.5
     container_name: adventurelog-db
     restart: unless-stopped
-    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
@@ -21,7 +19,6 @@ services:
     image: ghcr.io/seanmorley15/adventurelog-backend:latest
     container_name: adventurelog-backend
     restart: unless-stopped
-    env_file: .env
     ports:
       - "8016:80"
     depends_on:
