@@ -48,6 +48,7 @@ services:
       FRONTEND_URL: ${FRONTEND_URL}
       BACKEND_PORT: ${BACKEND_PORT}
       DISABLE_REGISTRATION: ${DISABLE_REGISTRATION}
+      FORCE_SOCIALACCOUNT_LOGIN: ${FORCE_SOCIALACCOUNT_LOGIN}
     volumes:
       - adventurelog_media:/code/media/
 
