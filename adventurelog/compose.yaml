@@ -47,6 +47,7 @@ services:
       DEBUG: ${DEBUG}
       FRONTEND_URL: ${FRONTEND_URL}
       BACKEND_PORT: ${BACKEND_PORT}
+      DISABLE_REGISTRATION: ${DISABLE_REGISTRATION}
     volumes:
       - adventurelog_media:/code/media/
 
