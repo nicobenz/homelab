@@ -26,6 +26,7 @@ services:
       DEBUG: true
       PAPERLESS_URL: ${PAPERLESS_URL}
       PAPERLESS_USE_X_FORWARD_HOST: "true"
+      PAPERLESS_PROXY_SSL_HEADER: '["HTTP_X_FORWARDED_PROTO", "https"]'
 
       # OIDC
       PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
