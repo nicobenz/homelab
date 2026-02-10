@@ -25,6 +25,7 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
       DEBUG: true
       PAPERLESS_URL: ${PAPERLESS_URL}
+      PAPERLESS_USE_X_FORWARD_HOST: "true"
 
       # OIDC
       PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
@@ -59,7 +60,7 @@ services:
 
       MANUAL_TAG: "paperless-gpt"
       AUTO_TAG: "paperless-gpt-auto"
-      
+
       LLM_PROVIDER: "openai"
       LLM_MODEL: "openai/gpt-5-mini"
       OPENAI_API_KEY: ${OPENAI_API_KEY}
