@@ -25,6 +25,31 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
       DEBUG: true
       PAPERLESS_URL: ${PAPERLESS_URL}
+
+      # OIDC
+      PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: >
+        {
+          "openid_connect": {
+            "OAUTH_PKCE_ENABLED": true,
+            "APPS": [
+              {
+                "provider_id": "authentik",
+                "name": "authentik",
+                "client_id": "${OIDC_CLIENT_ID}",
+                "secret": "${OIDC_CLIENT_SECRET}",
+                "settings": {
+                  "server_url": "${AUTHENTIK_URL}/application/o/paperless/.well-known/openid-configuration",
+                  "fetch_userinfo": true
+                }
+              }
+            ],
+            "SCOPE": ["openid", "profile", "email"]
+          }
+        }
+      PAPERLESS_LOGOUT_REDIRECT_URL: "${AUTHENTIK_URL}/application/o/paperless/end-session/"
+      PAPERLESS_SOCIAL_AUTO_SIGNUP: true
+      PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: true
   paperless-gpt:
     image: ghcr.io/icereed/paperless-gpt:latest
     environment:
