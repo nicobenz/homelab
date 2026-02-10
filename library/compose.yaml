@@ -25,8 +25,36 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
       DEBUG: true
       PAPERLESS_URL: ${PAPERLESS_URL}
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER: true
-      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_REMOTE_USER
+  paperless-gpt:
+    image: ghcr.io/icereed/paperless-gpt:latest
+    environment:
+      PAPERLESS_BASE_URL: "http://webserver:8000"
+      PAPERLESS_API_TOKEN: ${PAPERLESS_API_TOKEN}
+      PAPERLESS_PUBLIC_URL: ${PAPERLESS_URL}
+
+      MANUAL_TAG: "paperless-gpt"
+      AUTO_TAG: "paperless-gpt-auto"
+      
+      LLM_PROVIDER: "openai"
+      LLM_MODEL: "openai/gpt-5-mini"
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+      OCR_PROVIDER: "llm"
+      VISION_LLM_PROVIDER: "openai"
+      VISION_LLM_MODEL: "openai/gpt-5-mini"
+
+      OCR_PROCESS_MODE: "image"
+      PDF_SKIP_EXISTING_OCR: "false"
+
+      AUTO_OCR_TAG: "paperless-gpt-ocr-auto"
+      OCR_LIMIT_PAGES: "0"
+      LOG_LEVEL: "info"
+    volumes:
+      - ./prompts:/app/prompts
+    ports:
+      - "8010:8080"
+    depends_on:
+      - webserver
   gotenberg:
     image: docker.io/gotenberg/gotenberg:8.25
     restart: unless-stopped
