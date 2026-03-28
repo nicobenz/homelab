@@ -1,0 +1,11 @@
+services:
+  docsight:
+    image: ghcr.io/itsdnns/docsight:latest
+    container_name: docsight
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    volumes:
+      - ${ROOT_DIR}:/data
+    environment:
+      - TZ=Europe/Berlin  # fallback; timezone is configurable via the web UI
