@@ -15,4 +15,4 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ${ROOT_DIR}:/home/node/.n8n
-      - ./local-files:/files
+      - ${ROOT_DIR}/files:/files
