@@ -4,14 +4,14 @@ services:
     user: "0:0"
     restart: always
     ports:
-      - "127.0.0.1:5678:5678"
+      - "${LAN_IP}:5678:5678"
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_HOST=n8n.${DOMAIN_NAME}
+      - N8N_HOST=${LAN_IP}
       - N8N_PORT=5678
-      - N8N_PROTOCOL=https
+      - N8N_PROTOCOL=http
       - NODE_ENV=production
-      - WEBHOOK_URL=https://n8n.${DOMAIN_NAME}/
+      - WEBHOOK_URL=http://${LAN_IP}:5678/
       - GENERIC_TIMEZONE=Europe/Berlin
       - TZ=Europe/Berlin
     volumes:
