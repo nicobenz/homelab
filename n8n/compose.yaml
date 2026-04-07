@@ -3,8 +3,7 @@ services:
     image: docker.n8n.io/n8nio/n8n:2.14.2
     user: "0:0"
     restart: always
-    ports:
-      - "${LAN_IP}:5678:5678"
+    network_mode: host
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_HOST=${LAN_IP}
