@@ -6,6 +6,7 @@ services:
     network_mode: host
     environment:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_USER_FOLDER=/home/node/.n8n
       - N8N_HOST=${LAN_IP}
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
