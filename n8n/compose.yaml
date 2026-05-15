@@ -16,5 +16,5 @@ services:
       - GENERIC_TIMEZONE=Europe/Berlin
       - TZ=Europe/Berlin
     volumes:
-      - ${ROOT_DIR}:/home/node/.n8n
-      - ${ROOT_DIR}/files:/files
+      - ./data:/home/node/.n8n
+      - ./files:/files

@@ -6,6 +6,6 @@ services:
     ports:
       - "8765:8765"
     volumes:
-      - ${ROOT_DIR}:/data
+      - ./data:/data
     environment:
       - TZ=Europe/Berlin  # fallback; timezone is configurable via the web UI

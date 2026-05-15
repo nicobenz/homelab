@@ -1,7 +1,7 @@
 name: affine
 services:
   affine:
-    image: ghcr.io/toeverything/affine:v0.26.3}
+    image: ghcr.io/toeverything/affine:v0.26.3
     container_name: affine_server
     ports:
       - "3010:3010"
@@ -13,8 +13,8 @@ services:
       affine_migration:
         condition: service_completed_successfully
     volumes:
-      - affine_storage:/root/.affine/storage
-      - affine_config:/root/.affine/config
+      - ./storage:/root/.affine/storage
+      - ./config:/root/.affine/config
     env_file:
       - .env
     environment:
@@ -27,8 +27,8 @@ services:
     image: ghcr.io/toeverything/affine:v0.26.3
     container_name: affine_migration_job
     volumes:
-      - affine_storage:/root/.affine/storage
-      - affine_config:/root/.affine/config
+      - ./storage:/root/.affine/storage
+      - ./config:/root/.affine/config
     command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
     env_file:
       - .env
@@ -56,7 +56,7 @@ services:
     image: pgvector/pgvector:pg16
     container_name: affine_postgres
     volumes:
-      - affine_postgres_data:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -79,8 +79,3 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-
-volumes:
-  affine_storage:
-  affine_config:
-  affine_postgres_data:

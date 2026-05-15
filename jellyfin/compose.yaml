@@ -9,7 +9,7 @@ services:
       - ./config:/config
       - ./cache:/cache
       - /volume1/Media/Filme:/media/movies
-      - /volume1/Media/Filme:/media/shows
+      - /volume1/Media/Serien:/media/shows
     environment:
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - HEALTHCHECK_URL=http://localhost:8096/health
@@ -25,6 +25,4 @@ services:
       - JELLYFIN_FFMPEG=/usr/lib/jellyfin-ffmpeg/ffmpeg
       - XDG_CACHE_HOME=/cache
       - MALLOC_TRIM_THRESHOLD_=131072
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     restart: unless-stopped

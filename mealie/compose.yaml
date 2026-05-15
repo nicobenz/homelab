@@ -10,7 +10,7 @@ services:
         limits:
           memory: 1000M
     volumes:
-      - mealie-data:/app/data/
+      - ./data:/app/data/
     environment:
       ALLOW_SIGNUP: "false"
       PUID: 1000
@@ -56,7 +56,3 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-
-volumes:
-  mealie-data:
-  mealie-pgdata:

@@ -3,7 +3,7 @@ services:
     image: docker.io/library/redis:8
     restart: unless-stopped
     volumes:
-      - redisdata:/data
+      - ./redisdata:/data
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
@@ -14,8 +14,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - data:/usr/src/paperless/data
-      - media:/usr/src/paperless/media
+      - ./data:/usr/src/paperless/data
+      - ./media:/usr/src/paperless/media
       - /volume1/library/export:/usr/src/paperless/export
       - /volume1/library/consume:/usr/src/paperless/consume
     environment:
@@ -95,7 +95,3 @@ services:
   tika:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
-volumes:
-  data:
-  media:
-  redisdata:
