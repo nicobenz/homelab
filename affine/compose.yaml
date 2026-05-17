@@ -10,8 +10,6 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
-      affine_migration:
-        condition: service_completed_successfully
     volumes:
       - ./storage:/root/.affine/storage
       - ./config:/root/.affine/config
@@ -27,9 +25,13 @@ services:
       AFFINE_SERVER_EXTERNAL_URL: ${AFFINE_SERVER_EXTERNAL_URL}
     restart: unless-stopped
 
+  # Optional: DB migrations. Not started on normal deploy (avoids "partially" in Dockhand).
+  # After changing the Affine image tag, run on the NAS:
+  #   cd /volume1/dockhand/stacks/Home/affine
+  #   sudo docker compose --profile migrate run --rm affine_migration
   affine_migration:
+    profiles: ["migrate"]
     image: ghcr.io/toeverything/affine:0.26.3
-    container_name: affine_migration_job
     volumes:
       - ./storage:/root/.affine/storage
       - ./config:/root/.affine/config
