@@ -15,12 +15,16 @@ services:
     volumes:
       - ./storage:/root/.affine/storage
       - ./config:/root/.affine/config
-    env_file:
-      - .env
     environment:
-      - REDIS_SERVER_HOST=redis
-      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@postgres:5432/affine
-      - AFFINE_INDEXER_ENABLED=false
+      REDIS_SERVER_HOST: redis
+      DATABASE_URL: postgresql://affine:${DB_PASSWORD}@postgres:5432/affine
+      AFFINE_INDEXER_ENABLED: "false"
+      DB_USERNAME: affine
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: affine
+      AFFINE_SERVER_HTTPS: "true"
+      AFFINE_SERVER_HOST: ${AFFINE_SERVER_HOST}
+      AFFINE_SERVER_EXTERNAL_URL: ${AFFINE_SERVER_EXTERNAL_URL}
     restart: unless-stopped
 
   affine_migration:
@@ -30,12 +34,16 @@ services:
       - ./storage:/root/.affine/storage
       - ./config:/root/.affine/config
     command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
-    env_file:
-      - .env
     environment:
-      - REDIS_SERVER_HOST=redis
-      - DATABASE_URL=postgresql://${DB_USERNAME}:${DB_PASSWORD}@postgres:5432/affine
-      - AFFINE_INDEXER_ENABLED=false
+      REDIS_SERVER_HOST: redis
+      DATABASE_URL: postgresql://affine:${DB_PASSWORD}@postgres:5432/affine
+      AFFINE_INDEXER_ENABLED: "false"
+      DB_USERNAME: affine
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: affine
+      AFFINE_SERVER_HTTPS: "true"
+      AFFINE_SERVER_HOST: ${AFFINE_SERVER_HOST}
+      AFFINE_SERVER_EXTERNAL_URL: ${AFFINE_SERVER_EXTERNAL_URL}
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,7 +66,7 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_USER: affine
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: affine
       POSTGRES_INITDB_ARGS: "--data-checksums"
@@ -66,15 +74,7 @@ services:
       # or you may add 'POSTGRES_HOST_AUTH_METHOD=trust' to ignore postgres security policy
       POSTGRES_HOST_AUTH_METHOD: trust
     healthcheck:
-      test:
-        [
-          "CMD",
-          "pg_isready",
-          "-U",
-          "${DB_USERNAME}",
-          "-d",
-          "affine",
-        ]
+      test: ["CMD", "pg_isready", "-U", "affine", "-d", "affine"]
       interval: 10s
       timeout: 5s
       retries: 5
