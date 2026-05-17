@@ -25,33 +25,6 @@ services:
       AFFINE_SERVER_EXTERNAL_URL: ${AFFINE_SERVER_EXTERNAL_URL}
     restart: unless-stopped
 
-  # Optional: DB migrations. Not started on normal deploy (avoids "partially" in Dockhand).
-  # After changing the Affine image tag, run on the NAS:
-  #   cd /volume1/dockhand/stacks/Home/affine
-  #   sudo docker compose --profile migrate run --rm affine_migration
-  affine_migration:
-    profiles: ["migrate"]
-    image: ghcr.io/toeverything/affine:0.26.3
-    volumes:
-      - ./storage:/root/.affine/storage
-      - ./config:/root/.affine/config
-    command: ["sh", "-c", "node ./scripts/self-host-predeploy.js"]
-    environment:
-      REDIS_SERVER_HOST: redis
-      DATABASE_URL: postgresql://affine:${DB_PASSWORD}@postgres:5432/affine
-      AFFINE_INDEXER_ENABLED: "false"
-      DB_USERNAME: affine
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DATABASE: affine
-      AFFINE_SERVER_HTTPS: "true"
-      AFFINE_SERVER_HOST: ${AFFINE_SERVER_HOST}
-      AFFINE_SERVER_EXTERNAL_URL: ${AFFINE_SERVER_EXTERNAL_URL}
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
   redis:
     image: redis
     container_name: affine_redis
