@@ -1,0 +1,10 @@
+# Overrides bundled defaults only (see searxng docs). Used by bot detection even when
+# server.limiter is false. Allow homelab LAN clients (e.g. Open WebUI → host:8888).
+
+[botdetection.ip_lists]
+
+pass_ip = [
+  "192.168.0.0/16",
+  "10.0.0.0/8",
+  "172.16.0.0/12",
+]
