@@ -1,7 +1,10 @@
 # SearXNG — tracked in git; mounted at /etc/searxng via compose.
 # SEARXNG_SECRET and SEARXNG_BASE_URL in Dockhand override secret_key / base_url.
 
-use_default_settings: true
+use_default_settings:
+  engines:
+    remove:
+      - radio browser
 
 general:
   debug: false
