@@ -3,12 +3,12 @@ use_default_settings:
     keep_only:
       - duckduckgo
       - brave
-      - qwant
       - wikipedia
       - wikidata
       - openstreetmap
       - arxiv
       - pubmed
+      - reddit
 
 general:
   debug: false
