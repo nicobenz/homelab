@@ -1,8 +1,7 @@
 use_default_settings:
   engines:
     keep_only:
-      - duckduckgo
-      - brave
+      - google
       - wikipedia
       - wikidata
       - openstreetmap
