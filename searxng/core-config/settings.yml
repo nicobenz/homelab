@@ -1,14 +1,18 @@
-# SearXNG — tracked in git; mounted at /etc/searxng via compose.
-# SEARXNG_SECRET and SEARXNG_BASE_URL in Dockhand override secret_key / base_url.
-
 use_default_settings:
   engines:
-    remove:
-      - radio browser
+    keep_only:
+      - duckduckgo
+      - brave
+      - qwant
+      - wikipedia
+      - wikidata
+      - openstreetmap
+      - arxiv
+      - pubmed
 
 general:
   debug: false
-  instance_name: "SearXNG"
+  instance_name: "SearXNG for Open WebUI"
 
 search:
   safe_search: 2
