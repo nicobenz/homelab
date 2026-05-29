@@ -16,6 +16,8 @@ services:
       NODE_ENV: production
       SELF_HOSTED: "true"
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      OPENAI_API_KEY: ${OPENROUTER_API_KEY}
+      OPENAI_BASE_URL: https://openrouter.ai/api/v1
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
