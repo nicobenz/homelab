@@ -2,7 +2,7 @@ name: flights
 
 services:
   web:
-    image: ghcr.io/affromero/flight-finder:v0.9.3
+    image: ghcr.io/affromero/flight-finder:0.9.3
     container_name: flights
     restart: always
     init: true
