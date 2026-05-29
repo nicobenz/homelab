@@ -18,6 +18,8 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       OPENAI_API_KEY: ${OPENROUTER_API_KEY}
       OPENAI_BASE_URL: https://openrouter.ai/api/v1
+      EXPRESSVPN_API_URL: http://expressvpn:8000
+      EXPRESSVPN_SOCKS_URL: socks5://expressvpn:1080
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -27,6 +29,34 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      expressvpn:
+        condition: service_healthy
+
+  expressvpn:
+    image: docker.io/misioslav/expressvpn:latest
+    container_name: flights-expressvpn
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      ACTIVATION_CODE: ${EXPRESSVPN_CODE}
+      SERVER: smart
+      PROTOCOL: auto
+      SOCKS_ENABLED: "true"
+      SOCKS_PORT: 1080
+      API_ENABLED: "true"
+      API_PORT: 8000
+      HEALTHCHECK: "true"
+      NETWORK: on
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "expressvpnctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   db:
     image: postgres:16-alpine
