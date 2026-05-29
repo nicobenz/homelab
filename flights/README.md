@@ -31,6 +31,12 @@ If `flights-expressvpn` stays unhealthy on first deploy, check its logs — Syno
 
 On Synology (kernel 4.4.x), expect warnings about network lock and iptables — the sidecar disables network lock automatically; SOCKS proxy + control API on port 8000 still work for Flight Finder.
 
+The sidecar uses a patched entrypoint so a failed first VPN connect does not crash the container; it keeps retrying in the background. After deploy, if VPN still will not connect, restart `flights-expressvpn` once or twice (common Synology quirk). Check logs for `Entering supervision loop` and test:
+
+```bash
+docker exec flights-expressvpn wget -qO- http://127.0.0.1:8000/v1/status
+```
+
 ### LLM model
 
 Flight Finder does not read the model from compose. After deploy, open `/admin` → LLM settings:

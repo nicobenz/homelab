@@ -33,18 +33,22 @@ services:
         condition: service_started
 
   expressvpn:
-    image: docker.io/misioslav/expressvpn:latest
+    image: docker.io/misioslav/expressvpn:5.0.1.11498
     container_name: flights-expressvpn
     restart: always
     privileged: true
+    entrypoint: ["/bin/bash", "/config/expressvpn-entrypoint.sh"]
     cap_add:
       - NET_ADMIN
+      - SYS_PTRACE
     devices:
       - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./expressvpn-entrypoint.sh:/config/expressvpn-entrypoint.sh:ro
     environment:
       CODE: ${EXPRESSVPN_CODE}
       SERVER: smart
-      PROTOCOL: auto
+      PROTOCOL: openvpnudp
       NETWORK: off
       ALLOW_LAN: "true"
       SOCKS: on
@@ -52,13 +56,13 @@ services:
       CONTROL_SERVER: on
       CONTROL_PORT: 8000
       CONTROL_AUTH_TYPE: none
-    command: ["sleep", "infinity"]
+      RECONNECT_FAILURE_THRESHOLD: "0"
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8000/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 120s
+      start_period: 180s
 
   db:
     image: postgres:16-alpine
