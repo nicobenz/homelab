@@ -45,17 +45,17 @@ services:
       CODE: ${EXPRESSVPN_CODE}
       SERVER: smart
       PROTOCOL: auto
-      NETWORK: on
+      NETWORK: off
       ALLOW_LAN: "true"
       SOCKS: on
       SOCKS_PORT: 1080
       CONTROL_SERVER: on
       CONTROL_PORT: 8000
+      CONTROL_AUTH_TYPE: none
     stdin_open: true
     tty: true
-    command: /bin/bash
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:8000/v1/health >/dev/null || exit 1"]
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8000/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 10

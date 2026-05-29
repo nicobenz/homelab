@@ -29,6 +29,8 @@ Only Playwright scrape traffic goes through the VPN; DB, Redis, and the web UI s
 
 If `flights-expressvpn` stays unhealthy on first deploy, check its logs — Synology often needs a container restart once after TUN is available. Verify `EXPRESSVPN_CODE` is your activation code (not account email/password).
 
+On Synology (kernel 4.4.x), expect warnings about network lock and iptables — the sidecar disables network lock automatically; SOCKS proxy + control API on port 8000 still work for Flight Finder.
+
 ### LLM model
 
 Flight Finder does not read the model from compose. After deploy, open `/admin` → LLM settings:
