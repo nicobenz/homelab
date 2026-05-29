@@ -19,7 +19,15 @@ Set these variables in Dockhand when deploying the stack:
 | `OPENROUTER_API_KEY` | OpenRouter API key (same as mealie / open-webui) |
 | `EXPRESSVPN_CODE` | ExpressVPN activation code (for VPN price comparison sidecar) |
 
-Host must expose `/dev/net/tun` (TUN kernel module). Only Playwright scrape traffic goes through the VPN; DB, Redis, and the web UI stay on normal Docker networking.
+Host must expose `/dev/net/tun` (TUN kernel module). On Synology, load it at boot:
+
+```bash
+sudo insmod /lib/modules/tun.ko
+```
+
+Only Playwright scrape traffic goes through the VPN; DB, Redis, and the web UI stay on normal Docker networking.
+
+If `flights-expressvpn` stays unhealthy on first deploy, check its logs — Synology often needs a container restart once after TUN is available. Verify `EXPRESSVPN_CODE` is your activation code (not account email/password).
 
 ### LLM model
 

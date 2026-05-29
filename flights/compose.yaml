@@ -36,27 +36,30 @@ services:
     image: docker.io/misioslav/expressvpn:latest
     container_name: flights-expressvpn
     restart: always
+    privileged: true
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      ACTIVATION_CODE: ${EXPRESSVPN_CODE}
+      CODE: ${EXPRESSVPN_CODE}
       SERVER: smart
       PROTOCOL: auto
-      SOCKS_ENABLED: "true"
-      SOCKS_PORT: 1080
-      API_ENABLED: "true"
-      API_PORT: 8000
-      HEALTHCHECK: "true"
       NETWORK: on
+      ALLOW_LAN: "true"
+      SOCKS: on
+      SOCKS_PORT: 1080
+      CONTROL_SERVER: on
+      CONTROL_PORT: 8000
     stdin_open: true
     tty: true
+    command: /bin/bash
     healthcheck:
-      test: ["CMD", "expressvpnctl", "status"]
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:8000/v1/health >/dev/null || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 10
+      start_period: 180s
 
   db:
     image: postgres:16-alpine
