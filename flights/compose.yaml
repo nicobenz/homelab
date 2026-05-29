@@ -30,7 +30,7 @@ services:
       redis:
         condition: service_healthy
       expressvpn:
-        condition: service_healthy
+        condition: service_started
 
   expressvpn:
     image: docker.io/misioslav/expressvpn:latest
@@ -52,14 +52,13 @@ services:
       CONTROL_SERVER: on
       CONTROL_PORT: 8000
       CONTROL_AUTH_TYPE: none
-    stdin_open: true
-    tty: true
+    command: ["sleep", "infinity"]
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8000/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 10
-      start_period: 180s
+      retries: 5
+      start_period: 120s
 
   db:
     image: postgres:16-alpine
