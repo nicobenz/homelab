@@ -34,9 +34,8 @@ services:
       POSTGRES_DB: flight_finder
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /var/lib/postgresql/data
     volumes:
-      - ./pgdata:/var/lib/postgresql
+      - ./pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
