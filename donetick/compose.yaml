@@ -14,6 +14,7 @@ services:
       - "8085:8000"
     environment:
       DT_ENV: prod
+      DT_DATABASE_TYPE: sqlite
       DT_SQLITE_PATH: /usr/src/app/data/donetick.db
       TZ: Europe/Berlin
       DT_JWT_SECRET: ${DT_JWT_SECRET}
