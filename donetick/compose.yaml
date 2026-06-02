@@ -2,9 +2,7 @@ name: donetick
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: donetick/donetick:v0.1.75
     container_name: donetick-core
     restart: unless-stopped
     init: true
