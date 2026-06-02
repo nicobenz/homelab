@@ -11,7 +11,7 @@ services:
       - ./data:/usr/src/app/data
 
     ports:
-      - "8085:8000"
+      - "8085:2021"
     environment:
       DT_ENV: prod
       DT_DATABASE_TYPE: sqlite
@@ -31,7 +31,7 @@ services:
       DT_OAUTH2_MANAGER_GROUPS: ${DT_OAUTH2_MANAGER_GROUPS}
     hostname: donetick-core
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8000/api/v1/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:2021/api/v1/health || exit 1"]
       start_period: 1m
       timeout: 5s
       interval: 1m
