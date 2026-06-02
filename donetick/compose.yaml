@@ -1,0 +1,40 @@
+name: donetick
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: donetick-core
+    restart: unless-stopped
+    init: true
+
+    volumes:
+      - ./data:/usr/src/app/data
+
+    ports:
+      - "8085:8000"
+    environment:
+      DT_ENV: prod
+      DT_SQLITE_PATH: /usr/src/app/data/donetick.db
+      TZ: Europe/Berlin
+      DT_JWT_SECRET: ${DT_JWT_SECRET}
+      DT_SINGLE_CIRCLE_INSTANCE: true
+      DT_OAUTH2_NAME: ${DT_OAUTH2_NAME}
+      DT_OAUTH2_CLIENT_ID: ${DT_OAUTH2_CLIENT_ID}
+      DT_OAUTH2_CLIENT_SECRET: ${DT_OAUTH2_CLIENT_SECRET}
+      DT_OAUTH2_SCOPES: ${DT_OAUTH2_SCOPES}
+      DT_OAUTH2_AUTH_URL: ${DT_OAUTH2_AUTH_URL}
+      DT_OAUTH2_TOKEN_URL: ${DT_OAUTH2_TOKEN_URL}
+      DT_OAUTH2_USER_INFO_URL: ${DT_OAUTH2_USER_INFO_URL}
+      DT_OAUTH2_REDIRECT_URL: ${DT_OAUTH2_REDIRECT_URL}
+      DT_OAUTH2_ADMIN_GROUPS: ${DT_OAUTH2_ADMIN_GROUPS}
+      DT_OAUTH2_MANAGER_GROUPS: ${DT_OAUTH2_MANAGER_GROUPS}
+    hostname: donetick-core
+    command: ["/donetick-core"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8000/api/v1/health || exit 1"]
+      start_period: 1m
+      timeout: 5s
+      interval: 1m
+      retries: 3
