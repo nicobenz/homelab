@@ -1,6 +1,6 @@
 services:
   niftyclass:
-    image: ghcr.io/nicobenz/niftyclass:0.1.0
+    image: ghcr.io/nicobenz/niftyclass:latest
     container_name: niftyclass
     restart: unless-stopped
     ports:
