@@ -1,0 +1,22 @@
+name: github-actions-runner
+
+services:
+  runner:
+    image: myoung34/github-runner:2.336.0
+    container_name: github-actions-runner
+    restart: unless-stopped
+    init: true
+    environment:
+      REPO_URL: ${REPO_URL}
+      RUNNER_NAME: github-actions-runner
+      ACCESS_TOKEN: ${ACCESS_TOKEN}
+      RUNNER_WORKDIR: /tmp/runner/work
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data
+      RUNNER_SCOPE: repo
+      TZ: Europe/Berlin
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/runner/data
+      # Workdir path must match on host and in the container so jobs that
+      # talk to the host docker daemon via the socket can resolve bind mounts.
+      - /tmp/runner:/tmp/runner
