@@ -2,7 +2,7 @@ name: github-actions-runner
 
 services:
   runner:
-    image: myoung34/github-runner:2.336.0
+    image: myoung34/github-runner:ubuntu-noble
     container_name: github-actions-runner
     restart: unless-stopped
     init: true
