@@ -32,8 +32,3 @@ services:
       - ./terminal-data:/home/user
     environment:
       - OPEN_TERMINAL_API_KEY=${OPEN_TERMINAL_API_KEY}
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: "2.0"
