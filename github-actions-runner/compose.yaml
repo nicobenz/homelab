@@ -1,23 +1,41 @@
 name: github-actions-runner
 
+x-runner: &runner
+  image: myoung34/github-runner:ubuntu-noble
+  restart: unless-stopped
+  init: true
+  environment: &runner-env
+    ACCESS_TOKEN: ${ACCESS_TOKEN}
+    CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data
+    DISABLE_AUTOMATIC_DEREGISTRATION: "true"
+    RUNNER_SCOPE: repo
+    TZ: Europe/Berlin
+
 services:
-  runner:
-    image: myoung34/github-runner:ubuntu-noble
-    container_name: github-actions-runner
-    restart: unless-stopped
-    init: true
+  runner-1:
+    <<: *runner
+    container_name: github-actions-runner-1
     environment:
-      REPO_URL: ${REPO_URL}
-      RUNNER_NAME: github-actions-runner
-      ACCESS_TOKEN: ${ACCESS_TOKEN}
-      RUNNER_WORKDIR: ${RUNNER_WORKDIR}
-      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data
-      DISABLE_AUTOMATIC_DEREGISTRATION: "true"
-      RUNNER_SCOPE: repo
-      TZ: Europe/Berlin
+      <<: *runner-env
+      REPO_URL: ${REPO_URL_1}
+      RUNNER_NAME: github-actions-runner-1
+      RUNNER_WORKDIR: ${RUNNER_WORKDIR_1}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/runner/data
+      - ./data-1:/runner/data
       # Workdir path must match on host and in the container so jobs that
       # talk to the host docker daemon via the socket can resolve bind mounts.
-      - ${RUNNER_WORKDIR}:${RUNNER_WORKDIR}
+      - ${RUNNER_WORKDIR_1}:${RUNNER_WORKDIR_1}
+
+  runner-2:
+    <<: *runner
+    container_name: github-actions-runner-2
+    environment:
+      <<: *runner-env
+      REPO_URL: ${REPO_URL_2}
+      RUNNER_NAME: github-actions-runner-2
+      RUNNER_WORKDIR: ${RUNNER_WORKDIR_2}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data-2:/runner/data
+      - ${RUNNER_WORKDIR_2}:${RUNNER_WORKDIR_2}
