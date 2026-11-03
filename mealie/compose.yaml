@@ -17,6 +17,7 @@ services:
       PGID: 1000
       TZ: Europe/Berlin
       BASE_URL: ${BASE_URL}
+      TOKEN_TIME: "720"  # 30 days
       # Database Settings
       DB_ENGINE: postgres
       POSTGRES_USER: ${POSTGRES_USER}
@@ -31,6 +32,7 @@ services:
       OIDC_ADMIN_GROUP: ${OIDC_ADMIN_GROUP}
       OIDC_AUTO_REDIRECT: ${OIDC_AUTO_REDIRECT}
       OIDC_PROVIDER_NAME: Authentik
+      OIDC_REMEMBER_ME: "true"
     depends_on:
       postgres:
         condition: service_healthy
